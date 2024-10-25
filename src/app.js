@@ -6,6 +6,8 @@ require('dotenv').config();
 const app = express();
 const authRoutes = require('./routes/auth.routes');
 const userRoutes = require('./routes/user.routes');
+const codigoRoutes = require('./routes/codigo.routes');
+const intentoRoutes = require('./routes/intento.routes');
 
 app.use(cors());
 app.use(express.json()); // Para poder parsear JSON
@@ -19,8 +21,15 @@ mongoose.connect(process.env.MONGODB_URI, {
 
 // Usar las rutas de autenticación
 app.use('/api/auth', authRoutes);
-app.use('/api/auth', userRoutes);
+app.use('/api/user', userRoutes); // Cambié la ruta base de userRoutes
+app.use('/api/codigo', codigoRoutes);
+app.use('/api/intento', intentoRoutes); 
 
+// Middleware para manejar errores
+app.use((err, req, res, next) => {
+  console.error(err.stack); // Loguear el error en la consola
+  res.status(500).json({ success: false, message: 'Error en el servidor' });
+});
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
