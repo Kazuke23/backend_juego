@@ -10,17 +10,13 @@ const codigoRoutes = require('./routes/codigo.routes');
 const intentoRoutes = require('./routes/intento.routes');
 const ganadoresRoutes = require('./routes/ganadores.routes');
 
-// Configurar CORS manualmente
-app.use((req, res, next) => {
-  res.header('Access-Control-Allow-Origin', 'https://front-juego.vercel.app'); // Permite solo el dominio del frontend
-  res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
-  res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization');
-  next();
-});
+const corsOptions = {
+  origin: 'https://front-juego.vercel.app', // Permite solo el dominio del frontend
+  methods: 'GET, POST, PUT, DELETE, OPTIONS',
+  allowedHeaders: ['Content-Type', 'Authorization'],
+};
 
-app.use(cors()); // Middleware CORS
-app.use(express.json()); // Para poder parsear JSON
-
+app.use(cors(corsOptions)); // Middleware CORS
 // Conectar a MongoDB
 mongoose.connect(process.env.MONGODB_URI, {
   useNewUrlParser: true,

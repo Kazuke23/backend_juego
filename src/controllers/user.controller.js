@@ -14,7 +14,7 @@ const login = async (req, res) => {
 
     // Verifica si el usuario es administrador
     if (user.role === 'admin') {
-      return res.status(403).json({ message: 'No tienes permiso para iniciar sesión como administrador.' });
+      return res.status(403).json({ message: 'Iniciar sesion con cuenta de usuario.' });
     }
 
     const isMatch = await bcrypt.compare(password, user.password);
