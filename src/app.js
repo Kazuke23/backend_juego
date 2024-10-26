@@ -8,6 +8,8 @@ const authRoutes = require('./routes/auth.routes');
 const userRoutes = require('./routes/user.routes');
 const codigoRoutes = require('./routes/codigo.routes');
 const intentoRoutes = require('./routes/intento.routes');
+const ganadoresRoutes = require('./routes/ganadores.routes');
+
 
 app.use(cors());
 app.use(express.json()); // Para poder parsear JSON
@@ -23,7 +25,9 @@ mongoose.connect(process.env.MONGODB_URI, {
 app.use('/api/auth', authRoutes);
 app.use('/api/user', userRoutes); // Cambié la ruta base de userRoutes
 app.use('/api/codigo', codigoRoutes);
-app.use('/api/intento', intentoRoutes); 
+app.use('/api/intento', intentoRoutes);
+app.use('/api/ganadores', ganadoresRoutes);
+
 
 // Middleware para manejar errores
 app.use((err, req, res, next) => {

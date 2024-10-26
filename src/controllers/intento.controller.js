@@ -1,5 +1,5 @@
 const Intento = require('../models/Intento');
-const UserInfo = require('../models/UserInfo');
+
 
 const registrarIntento = async (req, res) => {
   const { fechaHora, codigo, premio } = req.body;
@@ -47,43 +47,4 @@ const registrarIntento = async (req, res) => {
   }
 };
 
-const obtenerGanadores = async (req, res) => {
-  try {
-    // Asegúrate de que la colección Intento tiene userid correctamente referenciado a UserInfo
-    const intentos = await Intento.find().populate({
-      path: 'userid', // Asegura que el campo 'userid' sea poblado
-      select: 'nombre cedula celular' // Solo selecciona los campos necesarios
-    });
-
-    // Verifica que los intentos tienen usuarios relacionados
-    const ganadores = intentos
-      .filter(intento => intento.userid) // Verifica que el intento tenga un usuario relacionado
-      .map(intento => ({
-        fecha: intento.fechaHora,
-        nombre: intento.userid.nombre,
-        cedula: intento.userid.cedula,
-        celular: intento.userid.celular,
-        codigo: intento.codigo,
-        premio: intento.premio,
-      }));
-
-    // Si no hay ganadores
-    if (ganadores.length === 0) {
-      return res.status(404).json({
-        success: false,
-        message: 'No hay ganadores disponibles',
-      });
-    }
-
-    // Responde con los ganadores
-    res.json(ganadores);
-  } catch (error) {
-    console.error('Error al obtener ganadores:', error); // Log de error
-    res.status(500).json({
-      success: false,
-      message: 'Error al obtener ganadores',
-      error: error.message,
-    });
-  }
-};
-module.exports = { registrarIntento, obtenerGanadores };
+module.exports = { registrarIntento };
