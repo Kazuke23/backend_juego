@@ -10,13 +10,9 @@ const codigoRoutes = require('./routes/codigo.routes');
 const intentoRoutes = require('./routes/intento.routes');
 const ganadoresRoutes = require('./routes/ganadores.routes');
 
-const corsOptions = {
-  origin: 'https://front-juego.vercel.app', // Permite solo el dominio del frontend
-  methods: 'GET, POST, PUT, DELETE, OPTIONS',
-  allowedHeaders: ['Content-Type', 'Authorization'],
-};
 
-app.use(cors(corsOptions)); // Middleware CORS
+app.use(express.json()); // Para poder parsear JSON
+
 // Conectar a MongoDB
 mongoose.connect(process.env.MONGODB_URI, {
   useNewUrlParser: true,
@@ -27,14 +23,14 @@ mongoose.connect(process.env.MONGODB_URI, {
 
 // Usar las rutas de autenticación
 app.use('/api/auth', authRoutes);
-app.use('/api/user', userRoutes);
+app.use('/api/user', userRoutes); // Cambié la ruta base de userRoutes
 app.use('/api/codigo', codigoRoutes);
 app.use('/api/intento', intentoRoutes);
 app.use('/api/ganadores', ganadoresRoutes);
 
 // Middleware para manejar errores
 app.use((err, req, res, next) => {
-  console.error(err.stack);
+  console.error(err.stack); // Loguear el error en la consola
   res.status(500).json({ success: false, message: 'Error en el servidor' });
 });
 
