@@ -13,6 +13,9 @@ const ganadoresRoutes = require('./routes/ganadores.routes');
 // Configurar CORS para permitir solicitudes desde tu frontend
 app.use(cors({
   origin: 'https://front-juego.vercel.app', // dominio de tu frontend
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'], // métodos permitidos
+  allowedHeaders: ['Content-Type', 'Authorization'], // encabezados permitidos
+  credentials: true, // si necesitas enviar cookies o encabezados de autenticación
 }));
 
 app.use(express.json()); // Para poder parsear JSON
@@ -27,14 +30,14 @@ mongoose.connect(process.env.MONGODB_URI, {
 
 // Usar las rutas de autenticación
 app.use('/api/auth', authRoutes);
-app.use('/api/user', userRoutes); // Cambié la ruta base de userRoutes
+app.use('/api/user', userRoutes);
 app.use('/api/codigo', codigoRoutes);
 app.use('/api/intento', intentoRoutes);
 app.use('/api/ganadores', ganadoresRoutes);
 
 // Middleware para manejar errores
 app.use((err, req, res, next) => {
-  console.error(err.stack); // Loguear el error en la consola
+  console.error(err.stack);
   res.status(500).json({ success: false, message: 'Error en el servidor' });
 });
 
