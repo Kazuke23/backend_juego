@@ -5,26 +5,26 @@ const bcrypt = require('bcryptjs');
 // Función para registrar un usuario
 const register = async (req, res) => {
   try {
-    const { name, dob, cedula, email, celular, ciudad, password } = req.body;
+    const { name, dob, cedula, correo, celular, ciudad, contraseña } = req.body;
 
     // Validar todos los campos
-    if (!name || !dob || !cedula || !email || !celular || !ciudad || !password) {
+    if (!name || !dob || !cedula || !correo || !celular || !ciudad || !contraseña) {
       return res.status(400).json({ message: 'Todos los campos son requeridos' });
     }
 
     // Verificar si el usuario ya existe
-    const existingUser = await User.findOne({ email });
+    const existingUser = await User.findOne({ correo });
     if (existingUser) {
       return res.status(400).json({ message: 'El usuario ya está registrado.' });
     }
 
     // Hashear la contraseña
-    const hashedPassword = await bcrypt.hash(password, 10);
+    const hashedPassword = await bcrypt.hash(contraseña, 10);
 
     // Crear el usuario en la colección User
     const newUser = new User({
-      email,
-      password: hashedPassword,
+      correo,
+      contraseña: hashedPassword,
       role: 'user'
     });
 
@@ -36,7 +36,7 @@ const register = async (req, res) => {
       nombre: name,
       fecha_de_nacimiento: dob,
       cedula,
-      correo: email,
+      correo,
       celular,
       ciudad,
       contraseña: hashedPassword, // Considera no guardar la contraseña aquí
@@ -53,22 +53,22 @@ const register = async (req, res) => {
 
 // Lógica para registrar un administrador
 const registerAdmin = async (req, res) => {
-  const { email, password } = req.body;
+  const { correo, contraseña } = req.body;
 
   try {
     // Verificar que el correo no exista ya
-    const existingAdmin = await User.findOne({ email });
+    const existingAdmin = await User.findOne({ correo });
     if (existingAdmin) {
       return res.status(400).json({ message: 'El correo ya está en uso' });
     }
 
     // Hashear la contraseña
-    const hashedPassword = await bcrypt.hash(password, 10);
+    const hashedPassword = await bcrypt.hash(contraseña, 10);
 
     // Crear un nuevo administrador
     const newAdmin = new User({
-      email,
-      password: hashedPassword,
+      correo,
+      contraseña: hashedPassword,
       role: 'admin' // Puedes agregar un campo de rol para identificar si es un administrador
     });
 
