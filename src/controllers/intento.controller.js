@@ -1,6 +1,8 @@
 // src/controllers/intento.controller.js
 const Intento = require('../models/Intento');
+const UserInfo = require('../models/UserInfo');
 
+// Función para registrar un intento
 const registrarIntento = async (req, res) => {
   const { codigo, premio } = req.body;
   const userId = req.userId; // Obtiene el ID del usuario desde el token
@@ -39,4 +41,41 @@ const registrarIntento = async (req, res) => {
   }
 };
 
-module.exports = { registrarIntento };
+// Función para obtener la lista de ganadores
+const getWinners = async (req, res) => {
+  try {
+    const winners = await Intento.aggregate([
+      {
+        $match: { premio: { $ne: "No ganaste" } } // Filtrar solo los registros de ganadores
+      },
+      {
+        $lookup: {
+          from: 'userinfos',         // Nombre de la colección userinfo en plural
+          localField: 'userId',       // Campo en Intento para unir
+          foreignField: 'userid',     // Campo en UserInfo para unir
+          as: 'userInfo'              // Nombre del campo resultante
+        }
+      },
+      {
+        $unwind: '$userInfo'         // Descomponer el array userInfo
+      },
+      {
+        $project: {                  // Seleccionar solo los campos necesarios
+          fechaHora: 1,
+          codigo: 1,
+          premio: 1,
+          'userInfo.nombre': 1,
+          'userInfo.cedula': 1,
+          'userInfo.celular': 1
+        }
+      }
+    ]);
+
+    res.json(winners);
+  } catch (error) {
+    console.error('Error al obtener la lista de ganadores:', error);
+    res.status(500).json({ message: 'Error al obtener la lista de ganadores' });
+  }
+};
+
+module.exports = { registrarIntento, getWinners };
