@@ -10,7 +10,14 @@ const codigoRoutes = require('./routes/codigo.routes');
 const intentoRoutes = require('./routes/intento.routes');
 
 
+// Habilitar CORS para el dominio de tu frontend en Vercel
+const allowedOrigins = ['https://front-juego.vercel.app']; // Reemplaza con la URL de tu frontend
 
+app.use(cors({
+  origin: allowedOrigins,
+  methods: ['GET', 'POST', 'PUT', 'DELETE'],
+  credentials: true,
+}));
 
 app.use(cors());
 app.use(express.json()); // Para poder parsear JSON
