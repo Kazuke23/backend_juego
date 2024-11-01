@@ -4,10 +4,10 @@ const mongoose = require('mongoose');
 require('dotenv').config();
 
 const app = express();
-const authRoutes = require('./src/routes/auth.routes');
-const userRoutes = require('./src/routes/user.routes');
-const codigoRoutes = require('./src/routes/codigo.routes');
-const intentoRoutes = require('./src/routes/intento.routes');
+const authRoutes = require('./routes/auth.routes');
+const userRoutes = require('./routes/user.routes');
+const codigoRoutes = require('./routes/codigo.routes');
+const intentoRoutes = require('./routes/intento.routes');
 
 // Habilitar CORS para el dominio de tu frontend en Vercel
 const allowedOrigins = ['https://front-juego.vercel.app'];
