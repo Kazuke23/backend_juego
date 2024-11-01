@@ -7,7 +7,7 @@ const intentoSchema = new mongoose.Schema({
     type: String,
     required: true,
     match: /^\d{3}$/ // Valida que el código sea de tres dígitos
-  },
+  }, 
   premio: { type: String, required: true },
   userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true } // Enlaza con el modelo User
 }, { timestamps: true });
