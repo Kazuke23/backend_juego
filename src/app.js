@@ -9,9 +9,8 @@ const userRoutes = require('./routes/user.routes');
 const codigoRoutes = require('./routes/codigo.routes');
 const intentoRoutes = require('./routes/intento.routes');
 
-
 // Habilitar CORS para el dominio de tu frontend en Vercel
-const allowedOrigins = ['https://front-juego.vercel.app']; // Reemplaza con la URL de tu frontend
+const allowedOrigins = ['https://front-juego.vercel.app'];
 
 app.use(cors({
   origin: allowedOrigins,
@@ -19,8 +18,7 @@ app.use(cors({
   credentials: true,
 }));
 
-app.use(cors());
-app.use(express.json()); // Para poder parsear JSON
+app.use(express.json()); // Para parsear JSON
 
 // Conectar a MongoDB
 mongoose.connect(process.env.MONGODB_URI, {
@@ -31,20 +29,15 @@ mongoose.connect(process.env.MONGODB_URI, {
 
 // Usar las rutas de autenticación
 app.use('/api/auth', authRoutes);
-app.use('/api/user', userRoutes); // Cambié la ruta base de userRoutes
+app.use('/api/user', userRoutes);
 app.use('/api/codigo', codigoRoutes);
 app.use('/api/intento', intentoRoutes);
 
-
-
 // Middleware para manejar errores
 app.use((err, req, res, next) => {
-  console.error(err.stack); // Loguear el error en la consola
+  console.error(err.stack);
   res.status(500).json({ success: false, message: 'Error en el servidor' });
 });
 
-// Iniciar el servidor
-const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => {
-  console.log(`Servidor corriendo en el puerto ${PORT}`);
-});
+// Exporta la aplicación
+module.exports = app;
