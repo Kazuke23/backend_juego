@@ -8,7 +8,7 @@ const authRoutes = require('./routes/auth.routes.js');
 const userRoutes = require('./routes/user.routes.js');
 const codigoRoutes = require('./routes/codigo.routes.js');
 const intentoRoutes = require('./routes/intento.routes.js');
-const videoRoutes = require('./routes/videoRoutes.js'); // Añadido para los videos
+
 
 // Habilitar CORS para el dominio de tu frontend en Vercel
 const allowedOrigins = ['https://front-juego.vercel.app'];
@@ -33,7 +33,7 @@ app.use('/api/auth', authRoutes);
 app.use('/api/user', userRoutes);
 app.use('/api/codigo', codigoRoutes);
 app.use('/api/intento', intentoRoutes);
-app.use('/api/videos', videoRoutes); // Añadido para los videos
+
 
 // Middleware para manejar errores
 app.use((err, req, res, next) => {
